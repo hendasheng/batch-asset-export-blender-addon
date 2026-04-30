@@ -3,7 +3,6 @@
 用于 Blender 的批量导出插件，可将当前选中的对象批量导出为 `OBJ` 和 `GLB`。
 
 - [English Doc.md](README.md)
-- [下载安装包](https://github.com/hendasheng/batch-asset-export-blender-addon/releases)
 
 ## 功能
 
@@ -23,9 +22,7 @@
 
 推荐方式：
 
-1. 打开插件下载页面：
-   - https://github.com/hendasheng/batch-asset-export-blender-addon/releases
-2. 下载最新版本下面附带的插件 zip 安装包
+1. [下载 Blender 插件](https://github.com/hendasheng/batch-asset-export-blender-addon/releases)
 3. 打开 Blender
 4. 进入 `Edit > Preferences > Add-ons`
 5. 点击 `Install...`
