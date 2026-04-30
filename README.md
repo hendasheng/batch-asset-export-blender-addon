@@ -2,6 +2,8 @@
 
 Blender add-on for batch exporting selected objects to OBJ and GLB.
 
+- 中文说明: [README_CN.md](C:/Users/lnlao/Desktop/batch-asset-export-blender-addon/README_CN.md)
+
 ## Features
 
 - Supports:
