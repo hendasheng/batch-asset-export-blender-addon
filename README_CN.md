@@ -2,6 +2,8 @@
 
 用于 Blender 的批量导出插件，可将当前选中的对象批量导出为 `OBJ` 和 `GLB`。
 
+- English: [README.md](README.md)
+
 ## 功能
 
 - 支持对象类型：
