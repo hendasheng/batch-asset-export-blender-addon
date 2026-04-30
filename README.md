@@ -17,21 +17,12 @@ Blender add-on for batch exporting selected objects to OBJ and GLB.
 - Chinese / English UI following Blender language
 
 ## Installation
-
-Recommended:
-
 1. [Download Blender Add-on](https://github.com/hendasheng/batch-asset-export-blender-addon/releases)
-3. In Blender, open `Edit > Preferences > Add-ons`
+2. Open Blender
+3. Go to `Edit > Preferences > Add-ons`
 4. Click `Install...`
 5. Choose the downloaded plugin zip package
 6. Enable `Batch Asset Export`
-
-Alternative:
-
-1. In Blender, open `Edit > Preferences > Add-ons`
-2. Click `Install...`
-3. Choose the add-on zip package, or install from this repo after zipping the `Batch_Asset_Export` folder
-4. Enable `Batch Asset Export`
 
 ## Panel Location
 
@@ -54,7 +45,7 @@ Alternative:
 
 - Download the plugin package from the version download page, not GitHub's automatically generated source code zip.
 - Set output paths before exporting.
-- If Geometry Nodes export is empty, realize instances first.
+- If `Geometry Nodes` export is empty, make sure `Realize Instances` has been applied first.
 - Recheck output paths when switching projects.
 
 ## Repository Structure
