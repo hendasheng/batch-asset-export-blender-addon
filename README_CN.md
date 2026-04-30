@@ -2,7 +2,7 @@
 
 用于 Blender 的批量导出插件，可将当前选中的对象批量导出为 `OBJ` 和 `GLB`。
 
-- [English Doc.md](README.md)
+- [English Doc](README.md)
 
 ## 功能
 
@@ -19,23 +19,12 @@
 - 界面支持中英文，会跟随 Blender 语言切换
 
 ## 安装
-
-推荐方式：
-
 1. [下载 Blender 插件](https://github.com/hendasheng/batch-asset-export-blender-addon/releases)
-3. 打开 Blender
-4. 进入 `Edit > Preferences > Add-ons`
-5. 点击 `Install...`
-6. 选择刚下载的插件 zip 文件
-7. 启用 `Batch Asset Export`
-
-备用方式：
-
-1. 打开 Blender
-2. 进入 `Edit > Preferences > Add-ons`
-3. 点击 `Install...`
-4. 选择插件 zip 包，或将仓库中的 `Batch_Asset_Export` 文件夹打包后安装
-5. 启用 `Batch Asset Export`
+2. 打开 Blender
+3. 进入 `Edit > Preferences > Add-ons`
+4. 点击 `Install...`
+5. 选择刚下载的插件 zip 文件
+6. 启用 `Batch Asset Export`
 
 ## 面板位置
 
@@ -58,7 +47,7 @@
 
 - 请下载版本页面里附带的插件安装包，不要下载 GitHub 自动生成的源码压缩包
 - 导出前必须先设置输出路径，否则插件会阻止导出
-- 如果 `Geometry Nodes` 导出为空，先检查是否已经“实现实例（Realize Instances）”
+- 如果 `几何节点` 导出为空，先检查是否已经“实现实例（Realize Instances）”
 - 每次换项目都建议重新确认输出目录
 
 ## 仓库结构
