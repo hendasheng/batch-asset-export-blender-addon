@@ -2,8 +2,7 @@
 
 Blender add-on for batch exporting selected objects to OBJ and GLB.
 
-- [中文文档.md](README_CN.md)
-- [Download Plugin Package](https://github.com/hendasheng/batch-asset-export-blender-addon/releases)
+- [中文文档](README_CN.md)
 
 ## Features
 
@@ -21,9 +20,7 @@ Blender add-on for batch exporting selected objects to OBJ and GLB.
 
 Recommended:
 
-1. Open the download page:
-   - https://github.com/hendasheng/batch-asset-export-blender-addon/releases
-2. Download the plugin zip package attached to the latest version
+1. [Download Blender Add-on](https://github.com/hendasheng/batch-asset-export-blender-addon/releases)
 3. In Blender, open `Edit > Preferences > Add-ons`
 4. Click `Install...`
 5. Choose the downloaded plugin zip package
@@ -36,8 +33,37 @@ Alternative:
 3. Choose the add-on zip package, or install from this repo after zipping the `Batch_Asset_Export` folder
 4. Enable `Batch Asset Export`
 
+## Panel Location
+
+- `View3D > Sidebar > Batch Export`
+
+## Usage
+
+1. Enable the formats you want to export
+   - `Export OBJ`
+   - `Export GLB`
+2. Set output directories for the enabled formats
+   - You can click the folder button on the right
+   - Or enter a Blender relative path such as `//../output/...`
+3. Set options as needed
+   - `Reset To Origin`
+4. Select the objects you want to export in `Object Mode`
+5. Click `Export Selected`
+
 ## Notes
 
-- Download the plugin package zip from the version download page, not GitHub's automatically generated source code zip.
+- Download the plugin package from the version download page, not GitHub's automatically generated source code zip.
 - Set output paths before exporting.
 - If Geometry Nodes export is empty, realize instances first.
+- Recheck output paths when switching projects.
+
+## Repository Structure
+
+- `Batch_Asset_Export/__init__.py`
+  - Main add-on file
+- `Batch_Asset_Export/README.md`
+  - Short add-on note inside the plugin folder
+- `README.md`
+  - English documentation
+- `README_CN.md`
+  - Chinese documentation
