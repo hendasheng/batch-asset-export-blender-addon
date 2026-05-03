@@ -8,11 +8,13 @@
 
 ## 功能
 
+![img](https://hendasheng-web.oss-cn-beijing.aliyuncs.com/Weekly/vol.162/2026-05-03%2015-58-46_demo.gif)
+
 - 支持对象类型：
   - `Collection Instance`
   - `Mesh`
   - `Curve`
-  - 已经能评估为实际几何的 `Geometry Nodes` 结果
+  - `Geometry Nodes (Realize Instance)`
 - 每个选中对象导出一组文件
   - 一个 `OBJ`
   - 一个 `GLB`

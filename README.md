@@ -8,6 +8,8 @@ Blender add-on for batch exporting selected objects to OBJ and GLB.
 
 ## Features
 
+![img](https://hendasheng-web.oss-cn-beijing.aliyuncs.com/Weekly/vol.162/2026-05-03%2015-58-46_demo.gif)
+
 - Supports:
   - Collection Instance
   - Mesh
