@@ -1,8 +1,10 @@
 # Batch Asset Export for Blender
 
+![img](https://hendasheng-web.oss-cn-beijing.aliyuncs.com/Media/Image/Cover/Blender%20Batch%20Asset%20Export_en.png)
+
 Blender add-on for batch exporting selected objects to OBJ and GLB.
 
-- [中文文档](README_CN.md)
+[中文文档](README_CN.md)
 
 ## Features
 
