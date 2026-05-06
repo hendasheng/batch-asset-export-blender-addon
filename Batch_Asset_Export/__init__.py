@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Batch Asset Export",
     "author": "OpenAI Codex",
-    "version": (0, 1, 0),
+    "version": (0, 1, 1),
     "blender": (3, 6, 0),
     "location": "View3D > Sidebar > Batch Asset Export",
     "description": "Batch export selected collection instances, meshes, curves, and realized GN results to OBJ and GLB",
@@ -108,12 +108,12 @@ def collect_supported_objects_recursive(collection, parent_matrix=None):
     results = []
 
     for obj in collection.objects:
-        local_matrix = parent_matrix @ obj.matrix_local.copy()
+        local_matrix = parent_matrix @ obj.matrix_world.copy()
 
         if is_supported_geometry_object(obj):
             results.append((obj, local_matrix))
         elif obj.instance_type == "COLLECTION" and obj.instance_collection is not None:
-            nested_parent = parent_matrix @ obj.matrix_local.copy()
+            nested_parent = parent_matrix @ obj.matrix_world.copy()
             results.extend(
                 collect_supported_objects_recursive(obj.instance_collection, nested_parent)
             )
@@ -135,9 +135,8 @@ def duplicate_mesh_from_eval(context, source_obj, world_matrix, temp_name):
     temp_obj.matrix_world = world_matrix
     context.scene.collection.objects.link(temp_obj)
 
-    if hasattr(source_obj.data, "materials"):
-        for material in source_obj.data.materials:
-            temp_obj.data.materials.append(material)
+    for material in source_obj.data.materials:
+        temp_obj.data.materials.append(material)
 
     return temp_obj
 
@@ -258,10 +257,7 @@ class BATCHX_OT_export_selected(Operator):
         try:
             for inst in selected_objects:
                 if inst.instance_type == "COLLECTION" and inst.instance_collection is not None:
-                    object_entries = collect_supported_objects_recursive(
-                        inst.instance_collection,
-                        inst.matrix_world.copy(),
-                    )
+                    object_entries = collect_supported_objects_recursive(inst.instance_collection)
                     export_name = safe_name(inst.name)
                     if not object_entries:
                         failures.append(f"{inst.name}: collection has no mesh/curve/GN objects")
@@ -275,11 +271,19 @@ class BATCHX_OT_export_selected(Operator):
 
                 temp_objects = []
                 try:
+                    location_offset = None
+                    if (
+                        not props.reset_to_origin
+                        and inst.instance_type == "COLLECTION"
+                        and inst.instance_collection is not None
+                    ):
+                        location_offset = inst.matrix_world.translation.copy()
+
                     for obj, nested_matrix in object_entries:
                         temp_name = f"{export_name}_TMP_{safe_name(obj.name)}"
                         world_matrix = nested_matrix.copy()
-                        if props.reset_to_origin:
-                            world_matrix.translation = (0.0, 0.0, 0.0)
+                        if location_offset is not None:
+                            world_matrix.translation = world_matrix.translation + location_offset
                         temp_obj = duplicate_mesh_from_eval(context, obj, world_matrix, temp_name)
                         if temp_obj is None:
                             failures.append(f"{inst.name}/{obj.name}: could not create mesh")
