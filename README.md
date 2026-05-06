@@ -56,6 +56,11 @@ Blender add-on for batch exporting selected objects to OBJ, GLB, and STL.
 - If `Geometry Nodes` export is empty, make sure `Realize Instances` has been applied first.
 - Recheck output paths when switching projects.
 
+## Credits
+
+- Format icons used in the cover image come from [UXWing](https://uxwing.com/)
+- Blender official content icons used in the cover image come from [Blender UI Icons](https://ui.blender.org/icons)
+
 ## Repository Structure
 
 - `Batch_Asset_Export/__init__.py`

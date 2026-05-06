@@ -56,6 +56,11 @@
 - 如果 `几何节点` 导出为空，先检查是否已经“实现实例（Realize Instances）”
 - 每次换项目都建议重新确认输出目录
 
+## 引用说明
+
+- 封面图中的格式图标来自 [UXWing](https://uxwing.com/)
+- 封面图中的 Blender 官方内容图标来自 [Blender UI Icons](https://ui.blender.org/icons)
+
 ## 仓库结构
 
 - `Batch_Asset_Export/__init__.py`
