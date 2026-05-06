@@ -2,7 +2,7 @@
 
 ![img](https://hendasheng-web.oss-cn-beijing.aliyuncs.com/Media/Image/Cover/Blender%20Batch%20Asset%20Export_en.png?x-oss-process=image/format,webp/quality,q_80)
 
-Blender add-on for batch exporting selected objects to OBJ and GLB.
+Blender add-on for batch exporting selected objects to OBJ, GLB, and STL.
 
 [中文文档](README_CN.md)
 
@@ -15,7 +15,10 @@ Blender add-on for batch exporting selected objects to OBJ and GLB.
   - Mesh
   - Curve
   - Realized Geometry Nodes results
-- One selected object exports one OBJ and/or one GLB
+- One selected object exports one file set
+  - One OBJ
+  - One GLB
+  - One STL
 - Recursive support for nested collections inside collection instances
 - Optional reset-to-origin transform behavior
 - Chinese / English UI following Blender language
@@ -37,6 +40,7 @@ Blender add-on for batch exporting selected objects to OBJ and GLB.
 1. Enable the formats you want to export
    - `Export OBJ`
    - `Export GLB`
+   - `Export STL`
 2. Set output directories for the enabled formats
    - You can click the folder button on the right
    - Or enter a Blender relative path such as `//../output/...`

@@ -1,10 +1,10 @@
 bl_info = {
     "name": "Batch Asset Export",
     "author": "OpenAI Codex",
-    "version": (0, 1, 1),
+    "version": (0, 1, 2),
     "blender": (3, 6, 0),
     "location": "View3D > Sidebar > Batch Asset Export",
-    "description": "Batch export selected collection instances, meshes, curves, and realized GN results to OBJ and GLB",
+    "description": "Batch export selected collection instances, meshes, curves, and realized GN results to OBJ, GLB, and STL",
     "category": "Import-Export",
 }
 
@@ -29,13 +29,16 @@ def tr(zh_text: str, en_text: str) -> str:
 translations_dict = {
     "zh_HANS": {
         ("*", "Batch Asset Export"): "批量资产导出",
-        ("*", "Batch export selected collection instances, meshes, curves, and realized GN results to OBJ and GLB"): "批量导出选中的集合实例、网格、曲线和已实体化的几何节点结果为 OBJ 和 GLB",
+        ("*", "Batch export selected collection instances, meshes, curves, and realized GN results to OBJ, GLB, and STL"): "批量导出选中的集合实例、网格、曲线和已实体化的几何节点结果为 OBJ、GLB 和 STL",
         ("*", "OBJ Output"): "OBJ 输出目录",
         ("*", "Output folder for OBJ files"): "OBJ 文件输出目录",
         ("*", "GLB Output"): "GLB 输出目录",
         ("*", "Output folder for GLB files"): "GLB 文件输出目录",
+        ("*", "STL Output"): "STL 输出目录",
+        ("*", "Output folder for STL files"): "STL 文件输出目录",
         ("*", "Export OBJ"): "导出 OBJ",
         ("*", "Export GLB"): "导出 GLB",
+        ("*", "Export STL"): "导出 STL",
         ("*", "Reset To Origin"): "位置归零",
         ("*", "Export selected objects with position reset to origin"): "导出时将选中对象的位置归零",
         ("*", "Export Selected"): "导出选中对象",
@@ -44,13 +47,16 @@ translations_dict = {
     },
     "zh_CN": {
         ("*", "Batch Asset Export"): "批量资产导出",
-        ("*", "Batch export selected collection instances, meshes, curves, and realized GN results to OBJ and GLB"): "批量导出选中的集合实例、网格、曲线和已实体化的几何节点结果为 OBJ 和 GLB",
+        ("*", "Batch export selected collection instances, meshes, curves, and realized GN results to OBJ, GLB, and STL"): "批量导出选中的集合实例、网格、曲线和已实体化的几何节点结果为 OBJ、GLB 和 STL",
         ("*", "OBJ Output"): "OBJ 输出目录",
         ("*", "Output folder for OBJ files"): "OBJ 文件输出目录",
         ("*", "GLB Output"): "GLB 输出目录",
         ("*", "Output folder for GLB files"): "GLB 文件输出目录",
+        ("*", "STL Output"): "STL 输出目录",
+        ("*", "Output folder for STL files"): "STL 文件输出目录",
         ("*", "Export OBJ"): "导出 OBJ",
         ("*", "Export GLB"): "导出 GLB",
+        ("*", "Export STL"): "导出 STL",
         ("*", "Reset To Origin"): "位置归零",
         ("*", "Export selected objects with position reset to origin"): "导出时将选中对象的位置归零",
         ("*", "Export Selected"): "导出选中对象",
@@ -91,6 +97,10 @@ def update_obj_export_dir(self, _context):
 
 def update_glb_export_dir(self, _context):
     ensure_output_dir(self.glb_export_dir)
+
+
+def update_stl_export_dir(self, _context):
+    ensure_output_dir(self.stl_export_dir)
 
 
 def has_geometry_nodes_modifier(obj):
@@ -183,6 +193,24 @@ def export_glb(context, temp_objects, filepath):
     )
 
 
+def export_stl(context, temp_objects, filepath):
+    bpy.ops.object.select_all(action="DESELECT")
+    for obj in temp_objects:
+        obj.select_set(True)
+    context.view_layer.objects.active = temp_objects[0]
+
+    if hasattr(bpy.ops.wm, "stl_export"):
+        return bpy.ops.wm.stl_export(
+            filepath=filepath,
+            export_selected_objects=True,
+        )
+
+    return bpy.ops.export_mesh.stl(
+        filepath=filepath,
+        use_selection=True,
+    )
+
+
 class BATCHX_Properties(PropertyGroup):
     obj_export_dir: StringProperty(
         name="OBJ Output",
@@ -196,6 +224,12 @@ class BATCHX_Properties(PropertyGroup):
         default="",
         update=update_glb_export_dir,
     )
+    stl_export_dir: StringProperty(
+        name="STL Output",
+        description="Output folder for STL files",
+        default="",
+        update=update_stl_export_dir,
+    )
     export_obj_enabled: BoolProperty(
         name="Export OBJ",
         default=True,
@@ -203,6 +237,10 @@ class BATCHX_Properties(PropertyGroup):
     export_glb_enabled: BoolProperty(
         name="Export GLB",
         default=True,
+    )
+    export_stl_enabled: BoolProperty(
+        name="Export STL",
+        default=False,
     )
     reset_to_origin: BoolProperty(
         name="Reset To Origin",
@@ -224,7 +262,7 @@ class BATCHX_OT_export_selected(Operator):
     def execute(self, context):
         props = context.scene.batchx_props
 
-        if not props.export_obj_enabled and not props.export_glb_enabled:
+        if not props.export_obj_enabled and not props.export_glb_enabled and not props.export_stl_enabled:
             self.report({"ERROR"}, tr("至少启用一种导出格式", "Enable at least one export format"))
             return {"CANCELLED"}
 
@@ -240,13 +278,22 @@ class BATCHX_OT_export_selected(Operator):
             show_message(message)
             return {"CANCELLED"}
 
+        if props.export_stl_enabled and not props.stl_export_dir.strip():
+            message = tr("STL 输出目录为空，请先设置输出路径", "STL output path is empty. Set the output path first.")
+            self.report({"ERROR"}, message)
+            show_message(message)
+            return {"CANCELLED"}
+
         obj_export_dir = bpy.path.abspath(props.obj_export_dir)
         glb_export_dir = bpy.path.abspath(props.glb_export_dir)
+        stl_export_dir = bpy.path.abspath(props.stl_export_dir)
 
         if props.export_obj_enabled:
             os.makedirs(obj_export_dir, exist_ok=True)
         if props.export_glb_enabled:
             os.makedirs(glb_export_dir, exist_ok=True)
+        if props.export_stl_enabled:
+            os.makedirs(stl_export_dir, exist_ok=True)
 
         selected_objects = list(context.selected_objects)
         original_active = context.view_layer.objects.active
@@ -301,6 +348,10 @@ class BATCHX_OT_export_selected(Operator):
                         glb_filepath = os.path.join(glb_export_dir, export_name + ".glb")
                         export_glb(context, temp_objects, glb_filepath)
 
+                    if props.export_stl_enabled:
+                        stl_filepath = os.path.join(stl_export_dir, export_name + ".stl")
+                        export_stl(context, temp_objects, stl_filepath)
+
                     exported_count += 1
                 except Exception as exc:
                     failures.append(f"{inst.name}: {exc}")
@@ -350,6 +401,7 @@ class BATCHX_OT_pick_directory(Operator):
         items=(
             ("OBJ", "OBJ", ""),
             ("GLB", "GLB", ""),
+            ("STL", "STL", ""),
         ),
     )
     directory: StringProperty(subtype="DIR_PATH")
@@ -358,13 +410,20 @@ class BATCHX_OT_pick_directory(Operator):
         props = context.scene.batchx_props
         if self.target == "OBJ":
             props.obj_export_dir = self.directory
-        else:
+        elif self.target == "GLB":
             props.glb_export_dir = self.directory
+        else:
+            props.stl_export_dir = self.directory
         return {"FINISHED"}
 
     def invoke(self, context, _event):
         props = context.scene.batchx_props
-        self.directory = props.obj_export_dir if self.target == "OBJ" else props.glb_export_dir
+        if self.target == "OBJ":
+            self.directory = props.obj_export_dir
+        elif self.target == "GLB":
+            self.directory = props.glb_export_dir
+        else:
+            self.directory = props.stl_export_dir
         context.window_manager.fileselect_add(self)
         return {"RUNNING_MODAL"}
 
@@ -405,6 +464,16 @@ class BATCHX_PT_panel(Panel):
         glb_row.prop(props, "glb_export_dir", text="")
         glb_op = glb_row.operator("batchx.pick_directory", text="", icon="FILE_FOLDER")
         glb_op.target = "GLB"
+        path_col.separator(factor=0.35)
+        stl_col = path_col.column(align=False)
+        stl_toggle_row = stl_col.row(align=True)
+        stl_toggle_row.prop(props, "export_stl_enabled", text=tr("导出 STL", "Export STL"))
+        stl_col.separator(factor=0.2)
+        stl_row = stl_col.row(align=True)
+        stl_row.enabled = props.export_stl_enabled
+        stl_row.prop(props, "stl_export_dir", text="")
+        stl_op = stl_row.operator("batchx.pick_directory", text="", icon="FILE_FOLDER")
+        stl_op.target = "STL"
 
         layout.separator(factor=0.4)
 
@@ -465,6 +534,7 @@ def register():
     try:
         ensure_output_dir(bpy.context.scene.batchx_props.obj_export_dir)
         ensure_output_dir(bpy.context.scene.batchx_props.glb_export_dir)
+        ensure_output_dir(bpy.context.scene.batchx_props.stl_export_dir)
     except Exception:
         pass
 

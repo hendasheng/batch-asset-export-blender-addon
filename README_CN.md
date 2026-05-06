@@ -2,7 +2,7 @@
 
 ![img](https://hendasheng-web.oss-cn-beijing.aliyuncs.com/Media/Image/Cover/Blender%20Batch%20Asset%20Export_cn.png?x-oss-process=image/format,webp/quality,q_80)
 
-用于 Blender 的批量导出插件，可将当前选中的对象批量导出为 `OBJ` 和 `GLB`。
+用于 Blender 的批量导出插件，可将当前选中的对象批量导出为 `OBJ`、`GLB` 和 `STL`。
 
 [English Doc](README.md)
 
@@ -18,6 +18,7 @@
 - 每个选中对象导出一组文件
   - 一个 `OBJ`
   - 一个 `GLB`
+  - 一个 `STL`
 - 支持递归处理集合实例中的嵌套集合
 - 支持“位置归零”开关
 - 界面支持中英文，会跟随 Blender 语言切换
@@ -39,6 +40,7 @@
 1. 先勾选需要导出的格式
    - `Export OBJ`
    - `Export GLB`
+   - `Export STL`
 2. 为已勾选的格式设置输出目录
    - 可以直接点击右侧文件夹按钮选择
    - 也可以填写 Blender 相对路径，例如 `//../output/...`
